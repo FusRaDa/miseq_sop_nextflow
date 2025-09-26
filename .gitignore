@@ -1,0 +1,6 @@
+/work
+.nextflow.log*
+/results
+.nextflow
+data/*
+!data/.gitkeep
