@@ -1,5 +1,9 @@
 // This process processes the stability.files from MOTHUR_MAKE_FILE
 // Primarily to produce trimmed contigs and their count
+
+// Files processed:
+// stability.files
+
 // Creates 4 new files: 
 // stability.trim.contigs.fasta
 // stability.scrap.contigs.fasta
@@ -10,19 +14,20 @@
 process MOTHUR_MAKE_CONTIGS{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results', mode: 'copy'
+    publishDir 'results', mode: 'symlink'
 
     input:
+        path input_done
         path input_dir
-
+        
     output:
-        path "${input_dir}/stability*"
-        path "${input_dir.name}", emit: dir
-
+        path "stability*", emit: done
+   
     script:
     """
     #!/bin/bash
-    cd ${input_dir}
+    cp -a ${input_dir}/. .
+    cp -a ${input_done}/. .
     mothur "#make.contigs(file=stability.files)"
     """
 }
