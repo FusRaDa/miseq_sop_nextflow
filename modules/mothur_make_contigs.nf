@@ -21,7 +21,7 @@ process MOTHUR_MAKE_CONTIGS{
         path input_dir
         
     output:
-        path "stability*", emit: done
+        path "stability*", emit: stability
    
     script:
     """

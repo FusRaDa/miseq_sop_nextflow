@@ -7,11 +7,11 @@ include { MOTHUR_MAKE_CONTIGS } from "./modules/mothur_make_contigs.nf"
 include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/mothur_summary_screen_seqs.nf"
 include { MOTHUR_UNIQUE_SEQS } from './modules/mothur_unique_seqs.nf'
 include { MOTHUR_PCR_SEQS } from './modules/mothur_pcr_seqs.nf'
+include { MOTHUR_ALIGN_SEQS } from './modules/mothur_align_seqs.nf'
 
 
 // Primary inputs
 params.data_dir = 'data/MiSeq_SOP'
-params.results_dir = 'results'
 params.ref_file = 'data/silva.bacteria/silva.bacteria/silva.bacteria.fasta'
 
 
@@ -23,23 +23,21 @@ workflow {
     MOTHUR_MAKE_FILE(data_ch)
 
     // Process stability files
-    MOTHUR_MAKE_CONTIGS(MOTHUR_MAKE_FILE.out.done, data_ch)
+    MOTHUR_MAKE_CONTIGS(MOTHUR_MAKE_FILE.out.stability, data_ch)
 
     // Summary and screen (cleaning) of contig sequences
-    MOTHUR_SUMMARY_SCREEN_SEQS(MOTHUR_MAKE_CONTIGS.out.done, data_ch)
+    MOTHUR_SUMMARY_SCREEN_SEQS(MOTHUR_MAKE_CONTIGS.out.stability)
 
     // Remove duplicate sequences
-    MOTHUR_UNIQUE_SEQS(MOTHUR_SUMMARY_SCREEN_SEQS.out.done, data_ch)
+    MOTHUR_UNIQUE_SEQS(MOTHUR_SUMMARY_SCREEN_SEQS.out.stability, data_ch)
 
+    // Channel from reference alignment file; Align unique sequences to ref alignments
     ref_ch = Channel.fromPath(params.ref_file)
+    MOTHUR_PCR_SEQS(MOTHUR_UNIQUE_SEQS.out.stability, ref_ch)
 
-    // Channel results directory
-    // results_ch = Channel.fromPath(params.results_dir)
+    // Align sequences to customized reference that will also save storage space
+    MOTHUR_ALIGN_SEQS(MOTHUR_PCR_SEQS.out.silva, MOTHUR_UNIQUE_SEQS.out.stability)
 
-    // Align unique sequences to ref alignments
-    MOTHUR_PCR_SEQS(MOTHUR_UNIQUE_SEQS.out.done, data_ch, ref_ch)
-
-    //
 
 
 }

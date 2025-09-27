@@ -20,7 +20,7 @@ process MOTHUR_UNIQUE_SEQS{
         path input_dir
 
     output:
-        path "stability*", emit: done
+        path "stability*", emit: stability
 
     script:
     """

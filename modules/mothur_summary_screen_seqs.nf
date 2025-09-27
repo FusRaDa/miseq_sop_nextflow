@@ -18,15 +18,13 @@ process MOTHUR_SUMMARY_SCREEN_SEQS{
 
     input:
         path input_done
-        path input_dir
 
     output:
-        path "stability*", emit: done
+        path "stability*", emit: stability
 
     script:
     """
     #!/bin/bash
-    cp -a ${input_dir}/. .
     cp -a ${input_done}/. .
     mothur "#summary.seqs(fasta=stability.trim.contigs.fasta, count=stability.contigs.count_table)"
     mothur "#screen.seqs(fasta=stability.trim.contigs.fasta, count=stability.contigs.count_table, maxambig=0, maxlength=275, maxhomop=8)"

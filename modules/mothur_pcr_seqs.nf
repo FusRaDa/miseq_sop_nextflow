@@ -18,16 +18,14 @@ process MOTHUR_PCR_SEQS{
 
     input:
         path input_done
-        path input_dir
         path ref_file
 
     output:
-        path "silva*", emit: done
+        path "silva*", emit: silva
 
     script:
     """
     #!/bin/bash
-    cp -a ${input_dir}/. .
     cp -a ${input_done}/. .
     mothur "#pcr.seqs(fasta=${ref_file}, start=11895, end=25318, keepdots=F)"
     mothur "#rename.file(input=silva.bacteria.pcr.fasta, new=silva.v4.fasta)"
