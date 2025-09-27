@@ -9,6 +9,7 @@
 // stability.trim.contigs.good.fasta
 // stability.trim.contigs.bad.accnos
 // stability.contigs.good.count_table
+// stability.trim.contigs.summary
 
 
 process MOTHUR_SUMMARY_SCREEN_SEQS{

@@ -4,8 +4,8 @@
 // Files processed:
 // stability.trim.contigs.good.fasta
 // stability.contigs.good.count_table
-// To produce files:
 
+// To produce files:
 // stability.trim.contigs.good.unique.fasta - primary file
 // stability.trim.contigs.good.count_table
 
@@ -17,7 +17,6 @@ process MOTHUR_UNIQUE_SEQS{
 
     input:
         path input_done
-        path input_dir
 
     output:
         path "stability*", emit: stability
@@ -25,7 +24,6 @@ process MOTHUR_UNIQUE_SEQS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_dir}/. .
     cp -a ${input_done}/. .
     mothur "#unique.seqs(fasta=stability.trim.contigs.good.fasta, count=stability.contigs.good.count_table)"
     """
