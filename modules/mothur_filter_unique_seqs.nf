@@ -2,13 +2,16 @@
 // Filter for only the overlapping regions (within v4 within the 16s region?) 
 
 // Files processed:
-// stability.trim.contigs.good.unique.good.align,
+// stability.trim.contigs.good.unique.good.align
+// stability.trim.contigs.good.unique.good.filter.fasta
+// stability.trim.contigs.good.good.count_table)
 
 // To produce files:
-// stability.trim.contigs.good.unique.good.filter.fasta
+// stability.trim.contigs.good.unique.good.filter.unique.fasta
+// stability.trim.contigs.good.unique.good.filter.count_table
 
 
-process MOTHUR_FILTER_SEQS{
+process MOTHUR_FILTER_UNIQUE_SEQS{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
     publishDir 'results', mode: 'symlink'
@@ -24,5 +27,6 @@ process MOTHUR_FILTER_SEQS{
     #!/bin/bash
     cp -a ${input_done}/. .
     mothur "#filter.seqs(fasta=stability.trim.contigs.good.unique.good.align, vertical=T, trump=.)"
+    mothur "#unique.seqs(fasta=stability.trim.contigs.good.unique.good.filter.fasta, count=stability.trim.contigs.good.good.count_table)"
     """
 }

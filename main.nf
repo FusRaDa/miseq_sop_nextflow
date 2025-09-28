@@ -8,12 +8,16 @@ include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/mothur_summary_screen_seq
 include { MOTHUR_UNIQUE_SEQS } from './modules/mothur_unique_seqs.nf'
 include { MOTHUR_PCR_SEQS } from './modules/mothur_pcr_seqs.nf'
 include { MOTHUR_ALIGN_SCREEN_SEQS } from './modules/mothur_align_screen_seqs.nf'
-include { MOTHUR_FILTER_SEQS } from './modules/mothur_filter_seqs.nf'
+include { MOTHUR_FILTER_UNIQUE_SEQS } from './modules/mothur_filter_unique_seqs.nf'
+include { MOTHER_PRE_CLUSTER } from './modules/mothur_pre_cluster.nf'
+include { MOTHUR_CHIMERA_VSEARCH } from './modules/mothur_chimera_vsearch.nf'
+include { MOTHUR_CLASSIFY } from './modules/mothur_classify.nf'
 
 
 // Primary inputs
 params.data_dir = 'data/MiSeq_SOP'
 params.ref_file = 'data/silva.bacteria/silva.bacteria/silva.bacteria.fasta'
+params.train_dir = 'data/trainset9_032012.pds'
 
 
 workflow {
@@ -40,5 +44,15 @@ workflow {
     MOTHUR_ALIGN_SCREEN_SEQS(MOTHUR_PCR_SEQS.out.silva, MOTHUR_UNIQUE_SEQS.out.stability)
 
     // Select the sequences overlapping the v4 region and remove character gaps
-    MOTHUR_FILTER_SEQS(MOTHUR_ALIGN_SCREEN_SEQS.out.stability)
+    MOTHUR_FILTER_UNIQUE_SEQS(MOTHUR_ALIGN_SCREEN_SEQS.out.stability)
+
+    // Pre-cluster sequences - de-noise
+    MOTHER_PRE_CLUSTER(MOTHUR_FILTER_UNIQUE_SEQS.out.stability)
+
+    // Remove chimeras with vsearch algo (heuristic) - do results differ??
+    MOTHUR_CHIMERA_VSEARCH(MOTHER_PRE_CLUSTER.out.stability)
+
+    // Classify sequences with Bayesian classifier
+    train_ch = Channel.fromPath(params.train_dir)
+    MOTHUR_CLASSIFY(MOTHUR_CHIMERA_VSEARCH.out.stability, train_ch)
 }
