@@ -2,20 +2,26 @@
 
 
 // Module imports
-include { MOTHUR_MAKE_FILE } from "./modules/mothur_make_file.nf"
-include { MOTHUR_MAKE_CONTIGS } from "./modules/mothur_make_contigs.nf"
-include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/mothur_summary_screen_seqs.nf"
-include { MOTHUR_UNIQUE_SEQS } from './modules/mothur_unique_seqs.nf'
-include { MOTHUR_PCR_SEQS } from './modules/mothur_pcr_seqs.nf'
-include { MOTHUR_ALIGN_SCREEN_SEQS } from './modules/mothur_align_screen_seqs.nf'
-include { MOTHUR_FILTER_UNIQUE_SEQS } from './modules/mothur_filter_unique_seqs.nf'
-include { MOTHER_PRE_CLUSTER } from './modules/mothur_pre_cluster.nf'
-include { MOTHUR_CHIMERA_VSEARCH } from './modules/mothur_chimera_vsearch.nf'
-include { MOTHUR_CLASSIFY } from './modules/mothur_classify.nf'
-include { MOTHUR_REMOVE_LINEAGE } from './modules/mothur_remove_lineage.nf'
-include { MOTHUR_GET_GROUPS } from './modules/mothur_get_groups.nf'
-include { MOTHUR_SEQ_ERROR } from './modules/mothur_seq_error.nf'
-include { MOTHUR_SEQ_OTU } from './modules/mothur_seq_otu.nf'
+include { MOTHUR_MAKE_FILE } from "./modules/getting_started/mothur_make_file.nf"
+
+include { MOTHUR_MAKE_CONTIGS } from "./modules/reducing_seq_pcr_errors/mothur_make_contigs.nf"
+include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/reducing_seq_pcr_errors/mothur_summary_screen_seqs.nf"
+
+include { MOTHUR_UNIQUE_SEQS } from './modules/processing_improved_seq/mothur_unique_seqs.nf'
+include { MOTHUR_PCR_SEQS } from './modules/processing_improved_seq/mothur_pcr_seqs.nf'
+include { MOTHUR_ALIGN_SCREEN_SEQS } from './modules/processing_improved_seq/mothur_align_screen_seqs.nf'
+include { MOTHUR_FILTER_UNIQUE_SEQS } from './modules/processing_improved_seq/mothur_filter_unique_seqs.nf'
+include { MOTHER_PRE_CLUSTER } from './modules/processing_improved_seq/mothur_pre_cluster.nf'
+include { MOTHUR_CHIMERA_VSEARCH } from './modules/processing_improved_seq/mothur_chimera_vsearch.nf'
+include { MOTHUR_CLASSIFY } from './modules/processing_improved_seq/mothur_classify.nf'
+include { MOTHUR_REMOVE_LINEAGE } from './modules/processing_improved_seq/mothur_remove_lineage.nf'
+
+include { MOTHUR_GET_GROUPS } from './modules/assessing_err_rates/mothur_get_groups.nf'
+include { MOTHUR_SEQ_ERROR } from './modules/assessing_err_rates/mothur_seq_error.nf'
+include { MOTHUR_SEQ_OTU } from './modules/assessing_err_rates/mothur_seq_otu.nf'
+
+include { MOTHUR_REMOVE_MOCK_SAMPLES } from './modules/preparing_for_analysis/mothur_remove_mock_samples.nf'
+include { MOTHUR_CLUSTER_OTU } from './modules/preparing_for_analysis/mothur_cluster_otu.nf'
 
 
 // Primary inputs
@@ -32,7 +38,7 @@ workflow {
     // Create stability.files from fastq files in directory MiSeq_SOP
     MOTHUR_MAKE_FILE(data_ch)
     /*** GETTING STARTED ***/
-    
+
 
     /*** REDUCING SEQUENCING & PCR ERRORS ***/
     // Process stability files
@@ -82,4 +88,14 @@ workflow {
     // Cluster sequences into OTU's
     MOTHUR_SEQ_OTU(MOTHUR_GET_GROUPS.out.stability, data_ch)
     /*** ASSESSING ERROR RATES ***/
+
+
+    /*** PREPARING FOR ANALYSIS ***/
+    // Remove mock samples/groups
+    MOTHUR_REMOVE_MOCK_SAMPLES(MOTHUR_REMOVE_LINEAGE.out.stability)
+
+    //Cluster sequences into OTU's - do results differ?? 
+    MOTHUR_CLUSTER_OTU(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    /*** PREPARING FOR ANALYSIS ***/
 }
