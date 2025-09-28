@@ -14,7 +14,7 @@
 process MOTHUR_PCR_SEQS{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results', mode: 'symlink'
+    publishDir 'results/processing_improved_seq', mode: 'symlink'
 
     input:
         path input_done

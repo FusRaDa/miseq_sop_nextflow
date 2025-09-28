@@ -28,10 +28,13 @@ workflow {
     // Channel data/input directory
     data_ch = Channel.fromPath(params.data_dir)
 
-    /*** REDUCING SEQUENCING & PCR ERRORS ***/
+    /*** GETTING STARTED ***/
     // Create stability.files from fastq files in directory MiSeq_SOP
     MOTHUR_MAKE_FILE(data_ch)
+    /*** GETTING STARTED ***/
+    
 
+    /*** REDUCING SEQUENCING & PCR ERRORS ***/
     // Process stability files
     MOTHUR_MAKE_CONTIGS(MOTHUR_MAKE_FILE.out.stability, data_ch)
 

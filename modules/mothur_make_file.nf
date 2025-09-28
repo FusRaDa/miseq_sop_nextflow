@@ -11,7 +11,7 @@
 process MOTHUR_MAKE_FILE{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results', mode: 'symlink'
+    publishDir 'results/getting_started', mode: 'symlink'
 
     input:
         path input_dir

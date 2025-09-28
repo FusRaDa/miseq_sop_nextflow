@@ -17,7 +17,7 @@
 process MOTHUR_SEQ_OTU{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results', mode: 'symlink'
+    publishDir 'results/assessing_err_rates', mode: 'symlink'
 
     input:
         path input_done
