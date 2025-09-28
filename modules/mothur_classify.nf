@@ -11,6 +11,7 @@
 // stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pds.wang.taxonomy
 // stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pds.wang.tax.summary
 
+
 process MOTHUR_CLASSIFY{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
