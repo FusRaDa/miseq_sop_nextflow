@@ -13,6 +13,9 @@ include { MOTHER_PRE_CLUSTER } from './modules/mothur_pre_cluster.nf'
 include { MOTHUR_CHIMERA_VSEARCH } from './modules/mothur_chimera_vsearch.nf'
 include { MOTHUR_CLASSIFY } from './modules/mothur_classify.nf'
 include { MOTHUR_REMOVE_LINEAGE } from './modules/mothur_remove_lineage.nf'
+include { MOTHUR_GET_GROUPS } from './modules/mothur_get_groups.nf'
+include { MOTHUR_SEQ_ERROR } from './modules/mothur_seq_error.nf'
+include { MOTHUR_SEQ_OTU } from './modules/mothur_seq_otu.nf'
 
 
 // Primary inputs
@@ -66,6 +69,14 @@ workflow {
     /*** PROCESSING IMPROVED SEQUENCES  ***/
 
 
-    /* ASSESSING ERROR RATES */
-    /* ASSESSING ERROR RATES */
+    /*** ASSESSING ERROR RATES ***/
+    // Measure error rates using mock data
+    MOTHUR_GET_GROUPS(MOTHUR_REMOVE_LINEAGE.out.stability, data_ch)
+
+    // Get error rates
+    MOTHUR_SEQ_ERROR(MOTHUR_GET_GROUPS.out.stability, data_ch)
+
+    // Cluster sequences into OTU's
+    MOTHUR_SEQ_OTU(MOTHUR_GET_GROUPS.out.stability, data_ch)
+    /*** ASSESSING ERROR RATES ***/
 }

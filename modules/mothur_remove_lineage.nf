@@ -1,4 +1,4 @@
-// This process processes files from MOTHUR_CLASSIFY
+// This process processes files from MOTHUR_CLASSIFY and MOTHUR_CHIMERA_VSEARCH
 // Remove undesirables and generate tax summary file
 
 // Files processed:
