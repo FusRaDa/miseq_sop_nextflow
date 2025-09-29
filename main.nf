@@ -2,29 +2,34 @@
 
 
 // Module imports
-include { MOTHUR_MAKE_FILE } from "./modules/getting_started/mothur_make_file.nf"
+include { MOTHUR_MAKE_FILE } from "./modules/0_getting_started/mothur_make_file.nf"
 
-include { MOTHUR_MAKE_CONTIGS } from "./modules/reducing_seq_pcr_errors/mothur_make_contigs.nf"
-include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/reducing_seq_pcr_errors/mothur_summary_screen_seqs.nf"
+include { MOTHUR_MAKE_CONTIGS } from "./modules/1_reducing_seq_pcr_errors/mothur_make_contigs.nf"
+include { MOTHUR_SUMMARY_SCREEN_SEQS } from "./modules/1_reducing_seq_pcr_errors/mothur_summary_screen_seqs.nf"
 
-include { MOTHUR_UNIQUE_SEQS } from './modules/processing_improved_seq/mothur_unique_seqs.nf'
-include { MOTHUR_PCR_SEQS } from './modules/processing_improved_seq/mothur_pcr_seqs.nf'
-include { MOTHUR_ALIGN_SCREEN_SEQS } from './modules/processing_improved_seq/mothur_align_screen_seqs.nf'
-include { MOTHUR_FILTER_UNIQUE_SEQS } from './modules/processing_improved_seq/mothur_filter_unique_seqs.nf'
-include { MOTHER_PRE_CLUSTER } from './modules/processing_improved_seq/mothur_pre_cluster.nf'
-include { MOTHUR_CHIMERA_VSEARCH } from './modules/processing_improved_seq/mothur_chimera_vsearch.nf'
-include { MOTHUR_CLASSIFY } from './modules/processing_improved_seq/mothur_classify.nf'
-include { MOTHUR_REMOVE_LINEAGE } from './modules/processing_improved_seq/mothur_remove_lineage.nf'
+include { MOTHUR_UNIQUE_SEQS } from './modules/2_processing_improved_seq/mothur_unique_seqs.nf'
+include { MOTHUR_PCR_SEQS } from './modules/2_processing_improved_seq/mothur_pcr_seqs.nf'
+include { MOTHUR_ALIGN_SCREEN_SEQS } from './modules/2_processing_improved_seq/mothur_align_screen_seqs.nf'
+include { MOTHUR_FILTER_UNIQUE_SEQS } from './modules/2_processing_improved_seq/mothur_filter_unique_seqs.nf'
+include { MOTHER_PRE_CLUSTER } from './modules/2_processing_improved_seq/mothur_pre_cluster.nf'
+include { MOTHUR_CHIMERA_VSEARCH } from './modules/2_processing_improved_seq/mothur_chimera_vsearch.nf'
+include { MOTHUR_CLASSIFY } from './modules/2_processing_improved_seq/mothur_classify.nf'
+include { MOTHUR_REMOVE_LINEAGE } from './modules/2_processing_improved_seq/mothur_remove_lineage.nf'
 
-include { MOTHUR_GET_GROUPS } from './modules/assessing_err_rates/mothur_get_groups.nf'
-include { MOTHUR_SEQ_ERROR } from './modules/assessing_err_rates/mothur_seq_error.nf'
-include { MOTHUR_SEQ_OTU } from './modules/assessing_err_rates/mothur_seq_otu.nf'
+include { MOTHUR_GET_GROUPS } from './modules/3_assessing_err_rates/mothur_get_groups.nf'
+include { MOTHUR_SEQ_ERROR } from './modules/3_assessing_err_rates/mothur_seq_error.nf'
+include { MOTHUR_SEQ_OTU } from './modules/3_assessing_err_rates/mothur_seq_otu.nf'
 
-include { MOTHUR_REMOVE_MOCK_SAMPLES } from './modules/preparing_for_analysis/mothur_remove_mock_samples.nf'
-include { MOTHUR_CLUSTER_OTU } from './modules/preparing_for_analysis/otu/mothur_cluster_otu.nf'
-include { MOTHUR_CLUSTER_SPLIT } from './modules/preparing_for_analysis/otu/mothur_cluster_split.nf'
-include { MOTHUR_MAKE_SHARED } from './modules/preparing_for_analysis/otu/mothur_make_shared.nf'
-include { MOTHUR_CLASSIFY_OTU } from './modules/preparing_for_analysis/otu/mothur_classify_otu.nf'
+include { MOTHUR_REMOVE_MOCK_SAMPLES } from './modules/4_preparing_for_analysis/mothur_remove_mock_samples.nf'
+include { MOTHUR_CLUSTER_OTU } from './modules/4_preparing_for_analysis/otu/mothur_cluster_otu.nf'
+include { MOTHUR_CLUSTER_SPLIT } from './modules/4_preparing_for_analysis/otu/mothur_cluster_split.nf'
+include { MOTHUR_MAKE_SHARED_OTU } from './modules/4_preparing_for_analysis/otu/mothur_make_shared_otu.nf'
+include { MOTHUR_CLASSIFY_OTU } from './modules/4_preparing_for_analysis/otu/mothur_classify_otu.nf'
+include { MOTHUR_MAKE_SHARED_ASV } from './modules/4_preparing_for_analysis/asv/mothur_make_shared_asv.nf'
+include { MOTHUR_CLASSIFY_ASV } from './modules/4_preparing_for_analysis/asv/mothur_classify_asv.nf'
+include { MOTHUR_PHYLOTYPE } from './modules/4_preparing_for_analysis/phylotypes/mothur_phylotype.nf'
+include { MOTHUR_MAKE_SHARED_PHYLOTYPES } from './modules/4_preparing_for_analysis/phylotypes/mothur_make_shared_phylotypes.nf'
+include { MOTHUR_CLASSIFY_PHYLOTYPES } from './modules/4_preparing_for_analysis/phylotypes/mothur_classify_phylotypes.nf'
 
 
 // Primary inputs
@@ -97,6 +102,7 @@ workflow {
     // Remove mock samples/groups
     MOTHUR_REMOVE_MOCK_SAMPLES(MOTHUR_REMOVE_LINEAGE.out.stability)
 
+    /* OTU */
     // Cluster sequences into OTU's - do results differ?? 
     MOTHUR_CLUSTER_OTU(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
 
@@ -104,6 +110,30 @@ workflow {
     MOTHUR_CLUSTER_SPLIT(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
 
     // Define how many sequences are in each OTU from each group cuttoff level at 0.03
+    MOTHUR_MAKE_SHARED_OTU(MOTHUR_CLUSTER_SPLIT.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    // Define concensus taxonomy for each OTU
     MOTHUR_CLASSIFY_OTU(MOTHUR_CLUSTER_SPLIT.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+    /* OTU */
+
+    /* ASV */
+    // Generate shared file for ASV
+    MOTHUR_MAKE_SHARED_ASV(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    // Generate concensus taxonomy for each ASV
+    MOTHUR_CLASSIFY_ASV(MOTHUR_MAKE_SHARED_ASV.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+    /* ASV */
+
+    /* Phylotypes */
+    // Bin sequences into phylotypes according to taxonomic classification 
+    MOTHUR_PHYLOTYPE(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    // Generate shared files for phylotypes
+    MOTHUR_MAKE_SHARED_PHYLOTYPES(MOTHUR_PHYLOTYPE.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    // Identify OTUs based on phylotypes
+    MOTHUR_CLASSIFY_PHYLOTYPES(MOTHUR_PHYLOTYPE.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+    /* Phylotypes */
+    
     /*** PREPARING FOR ANALYSIS ***/
 }

@@ -19,7 +19,7 @@
 process MOTHUR_SEQ_ERROR{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results/assessing_err_rates', mode: 'symlink'
+    publishDir 'results/3_assessing_err_rates', mode: 'symlink'
 
     input:
         path input_done

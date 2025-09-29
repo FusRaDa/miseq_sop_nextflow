@@ -9,10 +9,10 @@
 // final.opti_mcc.shared
 
 
-process MOTHUR_MAKE_SHARED{
+process MOTHUR_MAKE_SHARED_OTU{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results/preparing_for_analysis/otu', mode: 'symlink'
+    publishDir 'results/4_preparing_for_analysis/otu', mode: 'symlink'
 
     input:
         path input_done_1

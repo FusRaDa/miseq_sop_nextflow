@@ -20,7 +20,7 @@
 process MOTHUR_REMOVE_MOCK_SAMPLES{
     container 'community.wave.seqera.io/library/mothur:1.48.3--8c30967de5ffe410'
 
-    publishDir 'results/preparing_for_analysis', mode: 'symlink'
+    publishDir 'results/4_preparing_for_analysis', mode: 'symlink'
 
     input:
         path input_done
