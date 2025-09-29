@@ -21,7 +21,10 @@ include { MOTHUR_SEQ_ERROR } from './modules/assessing_err_rates/mothur_seq_erro
 include { MOTHUR_SEQ_OTU } from './modules/assessing_err_rates/mothur_seq_otu.nf'
 
 include { MOTHUR_REMOVE_MOCK_SAMPLES } from './modules/preparing_for_analysis/mothur_remove_mock_samples.nf'
-include { MOTHUR_CLUSTER_OTU } from './modules/preparing_for_analysis/mothur_cluster_otu.nf'
+include { MOTHUR_CLUSTER_OTU } from './modules/preparing_for_analysis/otu/mothur_cluster_otu.nf'
+include { MOTHUR_CLUSTER_SPLIT } from './modules/preparing_for_analysis/otu/mothur_cluster_split.nf'
+include { MOTHUR_MAKE_SHARED } from './modules/preparing_for_analysis/otu/mothur_make_shared.nf'
+include { MOTHUR_CLASSIFY_OTU } from './modules/preparing_for_analysis/otu/mothur_classify_otu.nf'
 
 
 // Primary inputs
@@ -94,8 +97,13 @@ workflow {
     // Remove mock samples/groups
     MOTHUR_REMOVE_MOCK_SAMPLES(MOTHUR_REMOVE_LINEAGE.out.stability)
 
-    //Cluster sequences into OTU's - do results differ?? 
+    // Cluster sequences into OTU's - do results differ?? 
     MOTHUR_CLUSTER_OTU(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
 
+    // Split sequences into bins and then cluster within each bin
+    MOTHUR_CLUSTER_SPLIT(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    // Define how many sequences are in each OTU from each group cuttoff level at 0.03
+    MOTHUR_CLASSIFY_OTU(MOTHUR_CLUSTER_SPLIT.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
     /*** PREPARING FOR ANALYSIS ***/
 }
