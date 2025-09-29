@@ -30,6 +30,14 @@ include { MOTHUR_CLASSIFY_ASV } from './modules/4_preparing_for_analysis/asv/mot
 include { MOTHUR_PHYLOTYPE } from './modules/4_preparing_for_analysis/phylotypes/mothur_phylotype.nf'
 include { MOTHUR_MAKE_SHARED_PHYLOTYPES } from './modules/4_preparing_for_analysis/phylotypes/mothur_make_shared_phylotypes.nf'
 include { MOTHUR_CLASSIFY_PHYLOTYPES } from './modules/4_preparing_for_analysis/phylotypes/mothur_classify_phylotypes.nf'
+include { MOTHUR_DIST_SEQS_CLEARCUT } from './modules/4_preparing_for_analysis/phylogenetic/mothur_dist_seqs_clearcut.nf'
+
+include { MOTHUR_COUNT_GROUPS } from './modules/5_analysis/mothur_count_groups.nf'
+include { MOTHUR_SUB_SAMPLE } from './modules/5_analysis/mothur_sub_sample.nf'
+include { MOTHUR_RAREFACTION_SINGLE } from './modules/5_analysis/otu/mothur_rarefaction_single.nf'
+include { MOTHUR_SUMMARY_SINGLE } from './modules/5_analysis/otu/mothur_summary_single.nf'
+include { MOTHUR_DIST_SHARED } from './modules/5_analysis/otu/mothur_dist_shared.nf'
+include { MOTHUR_PCOA_NMDS } from './modules/5_analysis/otu/mothur_pcoa_nmds.nf'
 
 
 // Primary inputs
@@ -134,6 +142,35 @@ workflow {
     // Identify OTUs based on phylotypes
     MOTHUR_CLASSIFY_PHYLOTYPES(MOTHUR_PHYLOTYPE.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
     /* Phylotypes */
-    
+
+    /* Phylogenetic */
+    // Calculate phylogenetic diversity, unifrac commands, tree generation
+    MOTHUR_DIST_SEQS_CLEARCUT(MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+    /* Phylogenetic */
     /*** PREPARING FOR ANALYSIS ***/
+
+
+    /*** ANALYSIS ***/
+    // Determine how many sequences are in each sample 
+    MOTHUR_COUNT_GROUPS(MOTHUR_MAKE_SHARED_OTU.out.fin)
+
+    // Generate subsampled files for analysis
+    MOTHUR_SUB_SAMPLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
+
+    /* OTU */
+    // Analyze alpha diversity of samples - use favorite graphing software
+    MOTHUR_RAREFACTION_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
+
+    // Generate table containing the number of sequences, the sample coverage, the number of observed OTUs, and the Inverse Simpson diversity estimate.
+    MOTHUR_SUMMARY_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
+
+    // Calculate similarity of the membership and structure in various samples
+    MOTHUR_DIST_SHARED(MOTHUR_MAKE_SHARED_OTU.out.fin)
+
+    // Construct PCOA (Principal Coordinates) plots
+    MOTHUR_PCOA_NMDS(MOTHUR_DIST_SHARED.out.fin)
+    /* OTU */
+
+
+    /*** ANALYSIS ***/
 }
