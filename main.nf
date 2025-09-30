@@ -41,6 +41,11 @@ include { MOTHUR_PCOA_NMDS } from './modules/5_analysis/otu/mothur_pcoa_nmds.nf'
 include { MOTHUR_AMOVA } from './modules/5_analysis/otu/mothur_amova.nf'
 include { MOTHUR_HOMOVA } from './modules/5_analysis/otu/mothur_homova.nf'
 include { MOTHUR_CORR_AXES } from './modules/5_analysis/otu/mothur_corr_axes.nf'
+include { MOTHUR_GET_COMMUNITY } from './modules/5_analysis/otu/mothur_get_community.nf'
+include { MOTHUR_METASTATS } from './modules/5_analysis/population_level/mothur_metastats.nf'
+include { MOTHUR_LEFSE } from './modules/5_analysis/population_level/mothur_lefse.nf'
+include { MOTHUR_PHYLO_DIVERSITY } from './modules/5_analysis/phylogeny/mothur_phylo_diversity.nf'
+include { MOTHUR_UNIFRAC } from './modules/5_analysis/phylogeny/mothur_unifrac.nf'
 
 
 // Primary inputs
@@ -154,19 +159,24 @@ workflow {
 
 
     /*** ANALYSIS ***/
+
     // Determine how many sequences are in each sample 
     MOTHUR_COUNT_GROUPS(MOTHUR_MAKE_SHARED_OTU.out.fin)
 
     // Generate subsampled files for analysis
     MOTHUR_SUB_SAMPLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
 
-    /* OTU */
+
+    /** OTU **/
+    /* ALPHA DIVERSITY */ 
     // Analyze alpha diversity of samples - use favorite graphing software
     MOTHUR_RAREFACTION_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
 
     // Generate table containing the number of sequences, the sample coverage, the number of observed OTUs, and the Inverse Simpson diversity estimate.
     MOTHUR_SUMMARY_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
+    /* ALPHA DIVERSITY */ 
 
+    /* BETA DIVERSITY MEASUREMENTS */ 
     // Calculate similarity of the membership and structure in various samples
     MOTHUR_DIST_SHARED(MOTHUR_MAKE_SHARED_OTU.out.fin)
 
@@ -181,8 +191,41 @@ workflow {
 
     // Determine what OTUs are responsible for shifting the samples along the two axes
     MOTHUR_CORR_AXES(MOTHUR_SUB_SAMPLE.out.fin, MOTHUR_PCOA_NMDS.out.fin)
-    /* OTU */
-    
+
+    // See if the data can be partitioned in to seperate community types
+    MOTHUR_GET_COMMUNITY(MOTHUR_SUB_SAMPLE.out.fin)
+    /* BETA DIVERSITY MEASUREMENTS */ 
+    /** OTU **/
+
+
+    /** POPULATION-LEVEL ANALYSIS **/ 
+    // Differentiate between different groupings of samples
+    MOTHUR_METASTATS(MOTHUR_SUB_SAMPLE.out.fin, data_ch)
+
+    // Similar method as metastats to identify outlying OTUs
+    MOTHUR_LEFSE(MOTHUR_SUB_SAMPLE.out.fin, data_ch)
+    /** POPULATION-LEVEL ANALYSIS **/ 
+
+
+    /** ASV-BASED ANALYSIS **/ 
+    /** ASV-BASED ANALYSIS **/ 
+
+
+    /** PHYLOTYPE-BASED ANALYSIS **/ 
+    /** PHYLOTYPE-BASED ANALYSIS **/ 
+
+
+    /** PHYLOGENY-BASED ANALYSIS **/ 
+    /* ALPHA DIVERSITY */
+    // Calculate alpha diversity
+    MOTHUR_PHYLO_DIVERSITY(MOTHUR_DIST_SEQS_CLEARCUT.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+
+    /* BETA DIVERSITY */
+    MOTHUR_UNIFRAC(MOTHUR_DIST_SEQS_CLEARCUT.out.fin, MOTHUR_REMOVE_MOCK_SAMPLES.out.fin)
+    /* BETA DIVERSITY */
+
+    // Refer back to analyzing beta diversity in OTU example...
+    /** PHYLOGENY-BASED ANALYSIS **/ 
 
     /*** ANALYSIS ***/
 }

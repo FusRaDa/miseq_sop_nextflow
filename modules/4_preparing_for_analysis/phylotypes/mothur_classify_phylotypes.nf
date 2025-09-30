@@ -7,7 +7,18 @@
 // final.tx.list
 
 // To produce files:
-
+// final.tx.1.cons.taxonomy
+// final.tx.1.cons.tax.summary
+// final.tx.2.cons.taxonomy
+// final.tx.2.cons.tax.summary
+// final.tx.3.cons.taxonomy
+// final.tx.3.cons.tax.summary
+// final.tx.4.cons.taxonomy
+// final.tx.4.cons.tax.summary
+// final.tx.5.cons.taxonomy
+// final.tx.5.cons.tax.summary
+// final.tx.6.cons.taxonomy
+// final.tx.6.cons.tax.summary
 
 
 process MOTHUR_CLASSIFY_PHYLOTYPES{
