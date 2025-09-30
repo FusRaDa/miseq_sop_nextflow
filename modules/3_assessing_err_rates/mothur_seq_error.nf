@@ -31,7 +31,6 @@ process MOTHUR_SEQ_ERROR{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     cp -a ${input_dir}/. .
     mothur "#seq.error(fasta=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.fasta, count=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.count_table, reference=HMP_MOCK.v35.fasta, aligned=F)"
     """

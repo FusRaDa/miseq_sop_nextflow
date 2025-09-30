@@ -22,7 +22,6 @@ process MOTHUR_SUMMARY_SINGLE{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#summary.single(shared=final.opti_mcc.shared, calc=nseqs-coverage-sobs-invsimpson, subsample=T)"
     """
 }

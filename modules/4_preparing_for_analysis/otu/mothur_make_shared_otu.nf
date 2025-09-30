@@ -24,8 +24,6 @@ process MOTHUR_MAKE_SHARED_OTU{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done_1}/. .
-    cp -a ${input_done_2}/. .
     mothur "#make.shared(list=final.opti_mcc.list, count=final.count_table, label=0.03)"
     """
 }

@@ -23,7 +23,6 @@ process MOTHUR_DIST_SEQS_CLEARCUT{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#dist.seqs(fasta=final.fasta, output=lt)"
     mothur "#clearcut(phylip=final.phylip.dist)"
     """

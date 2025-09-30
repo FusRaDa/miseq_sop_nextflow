@@ -22,7 +22,6 @@ process MOTHUR_COUNT_GROUPS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#count.groups(shared=final.opti_mcc.shared)"
     """
 }

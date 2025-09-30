@@ -26,8 +26,6 @@ process MOTHUR_CLASSIFY_OTU{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done_1}/. .
-    cp -a ${input_done_2}/. .
     mothur "#classify.otu(list=final.opti_mcc.list, count=final.count_table, taxonomy=final.taxonomy, label=0.03)"
     """
 }

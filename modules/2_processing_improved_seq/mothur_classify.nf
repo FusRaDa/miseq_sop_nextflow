@@ -27,7 +27,6 @@ process MOTHUR_CLASSIFY{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     cp -a ${train_ref}/. .
     mothur "#classify.seqs(fasta=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.fasta, count=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.count_table, reference=trainset9_032012.pds.fasta, taxonomy=trainset9_032012.pds.tax)"
     """

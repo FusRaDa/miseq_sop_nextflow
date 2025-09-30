@@ -24,7 +24,6 @@ process MOTHUR_PHYLOTYPE{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#phylotype(taxonomy=final.taxonomy)"
     """
 }

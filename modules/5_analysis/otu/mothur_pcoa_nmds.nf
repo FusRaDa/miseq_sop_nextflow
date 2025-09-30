@@ -26,7 +26,6 @@ process MOTHUR_PCOA_NMDS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#pcoa(phylip=final.opti_mcc.braycurtis.0.03.lt.ave.dist)"
     mothur "#nmds(phylip=final.opti_mcc.braycurtis.0.03.lt.ave.dist)"
     # Test nmds 3 dimensional

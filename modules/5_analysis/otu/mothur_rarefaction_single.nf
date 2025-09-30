@@ -22,7 +22,6 @@ process MOTHUR_RAREFACTION_SINGLE{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#rarefaction.single(shared=final.opti_mcc.shared, calc=sobs, freq=100)"
     """
 }

@@ -25,7 +25,6 @@ process MOTHUR_FILTER_UNIQUE_SEQS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#filter.seqs(fasta=stability.trim.contigs.good.unique.good.align, vertical=T, trump=.)"
     mothur "#unique.seqs(fasta=stability.trim.contigs.good.unique.good.filter.fasta, count=stability.trim.contigs.good.good.count_table)"
     """

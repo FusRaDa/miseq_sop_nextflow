@@ -29,7 +29,6 @@ process MOTHUR_SEQ_OTU{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     cp -a ${input_dir}/. .
     mothur "#dist.seqs(fasta=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.fasta, cutoff=0.03)"
     mothur "#cluster(column=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.dist, count=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.count_table)"

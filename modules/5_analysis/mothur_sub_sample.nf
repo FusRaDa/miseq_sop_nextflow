@@ -22,7 +22,6 @@ process MOTHUR_SUB_SAMPLE{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#sub.sample(shared=final.opti_mcc.shared, size=2404)"
     # size parameter may not be necessary as the smallest size in shared file is set to default
     """

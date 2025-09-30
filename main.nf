@@ -38,6 +38,9 @@ include { MOTHUR_RAREFACTION_SINGLE } from './modules/5_analysis/otu/mothur_rare
 include { MOTHUR_SUMMARY_SINGLE } from './modules/5_analysis/otu/mothur_summary_single.nf'
 include { MOTHUR_DIST_SHARED } from './modules/5_analysis/otu/mothur_dist_shared.nf'
 include { MOTHUR_PCOA_NMDS } from './modules/5_analysis/otu/mothur_pcoa_nmds.nf'
+include { MOTHUR_AMOVA } from './modules/5_analysis/otu/mothur_amova.nf'
+include { MOTHUR_HOMOVA } from './modules/5_analysis/otu/mothur_homova.nf'
+include { MOTHUR_CORR_AXES } from './modules/5_analysis/otu/mothur_corr_axes.nf'
 
 
 // Primary inputs
@@ -169,8 +172,17 @@ workflow {
 
     // Construct PCOA (Principal Coordinates) plots
     MOTHUR_PCOA_NMDS(MOTHUR_DIST_SHARED.out.fin)
-    /* OTU */
 
+    // Determine if clustering within the ordinations is statistically significant using AMOVA
+    MOTHUR_AMOVA(MOTHUR_DIST_SHARED.out.fin, data_ch)
+
+    // Determine if variation in the early samples is significantly different from the variation in the late samples
+    MOTHUR_HOMOVA(MOTHUR_DIST_SHARED.out.fin, data_ch)
+
+    // Determine what OTUs are responsible for shifting the samples along the two axes
+    MOTHUR_CORR_AXES(MOTHUR_SUB_SAMPLE.out.fin, MOTHUR_PCOA_NMDS.out.fin)
+    /* OTU */
+    
 
     /*** ANALYSIS ***/
 }

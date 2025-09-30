@@ -26,7 +26,6 @@ process MOTHUR_PCR_SEQS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#pcr.seqs(fasta=${ref_file}, start=11895, end=25318, keepdots=F)"
     mothur "#rename.file(input=silva.bacteria.pcr.fasta, new=silva.v4.fasta)"
     mothur "#summary.seqs(fasta=silva.v4.fasta)"

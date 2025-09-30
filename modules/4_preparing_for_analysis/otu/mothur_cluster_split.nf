@@ -28,7 +28,6 @@ process MOTHUR_CLUSTER_SPLIT{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#cluster.split(fasta=final.fasta, count=final.count_table, taxonomy=final.taxonomy, taxlevel=4, cutoff=0.03)"
     """
 }

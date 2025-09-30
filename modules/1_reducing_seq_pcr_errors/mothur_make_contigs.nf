@@ -27,7 +27,6 @@ process MOTHUR_MAKE_CONTIGS{
     """
     #!/bin/bash
     cp -a ${input_dir}/. .
-    cp -a ${input_done}/. .
     mothur "#make.contigs(file=stability.files)"
     """
 }

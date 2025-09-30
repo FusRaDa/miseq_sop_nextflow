@@ -25,7 +25,6 @@ process MOTHUR_GET_GROUPS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     cp -a ${input_dir}/. .
     mothur "#get.groups(count=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.count_table, fasta=stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.fasta, groups=Mock)"
     """

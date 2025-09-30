@@ -24,7 +24,6 @@ process MOTHUR_UNIQUE_SEQS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#unique.seqs(fasta=stability.trim.contigs.good.fasta, count=stability.contigs.good.count_table)"
     """
 }

@@ -26,8 +26,6 @@ process MOTHUR_CLASSIFY_ASV{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done_1}/. .
-    cp -a ${input_done_2}/. .
     mothur "#classify.otu(list=final.asv.list, count=final.count_table, taxonomy=final.taxonomy, label=ASV)"
     """
 }

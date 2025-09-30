@@ -23,7 +23,6 @@ process MOTHUR_MAKE_SHARED_ASV{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#make.shared(count=final.count_table)"
     """
 }

@@ -25,7 +25,6 @@ process MOTHUR_DIST_SHARED{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#dist.shared(shared=final.opti_mcc.shared, calc=braycurtis-jclass, subsample=t)"
     """
 }

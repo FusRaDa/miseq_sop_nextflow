@@ -44,7 +44,6 @@ process MOTHER_PRE_CLUSTER{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done}/. .
     mothur "#pre.cluster(fasta=stability.trim.contigs.good.unique.good.filter.unique.fasta, count=stability.trim.contigs.good.unique.good.filter.count_table, diffs=2)"
     """
 }

@@ -21,8 +21,8 @@ process MOTHUR_ALIGN_SCREEN_SEQS{
     publishDir 'results/2_processing_improved_seq', mode: 'symlink'
 
     input:
-        path input_done_silva
-        path input_done_stability
+        path input_done_1
+        path input_done_2
 
     output:
         path "stability*", emit: stability
@@ -30,8 +30,6 @@ process MOTHUR_ALIGN_SCREEN_SEQS{
     script:
     """
     #!/bin/bash
-    cp -a ${input_done_silva}/. .
-    cp -a ${input_done_stability}/. .
     mothur "#align.seqs(fasta=stability.trim.contigs.good.unique.fasta, reference=silva.v4.fasta)"
     mothur "#summary.seqs(fasta=stability.trim.contigs.good.unique.align, count=stability.trim.contigs.good.count_table)"
     mothur "#screen.seqs(fasta=stability.trim.contigs.good.unique.align, count=stability.trim.contigs.good.count_table, start=1968, end=11550)"
