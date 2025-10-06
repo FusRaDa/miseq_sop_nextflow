@@ -172,6 +172,8 @@ workflow {
     // Analyze alpha diversity of samples - use favorite graphing software
     MOTHUR_RAREFACTION_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
 
+    //graph rarefaction output file here
+
     // Generate table containing the number of sequences, the sample coverage, the number of observed OTUs, and the Inverse Simpson diversity estimate.
     MOTHUR_SUMMARY_SINGLE(MOTHUR_MAKE_SHARED_OTU.out.fin)
     /* ALPHA DIVERSITY */ 
