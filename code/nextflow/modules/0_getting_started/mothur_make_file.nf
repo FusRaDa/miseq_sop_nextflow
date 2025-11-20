@@ -18,11 +18,10 @@ process MOTHUR_MAKE_FILE{
 
     output:
         path "stability*", emit: stability
-
+    
     script:
     """
     #!/bin/bash
-    cp -a ${input_dir}/. .
-    mothur "#make.file(inputdir=., type=fastq, prefix=stability)"
+    mothur "#make.file(inputdir=${input_dir}, type=fastq, prefix=stability)"
     """
 }
