@@ -56,14 +56,14 @@ params.train_dir = 'data/trainset9_032012.pds'
 
 workflow {
     // Channel data/input directory
-    data_ch = Channel.fromPath(params.data_dir)
+    data_ch = channel.fromPath(params.data_dir)
 
     /*** GETTING STARTED ***/
     // Create stability.files from fastq files in directory MiSeq_SOP
     MOTHUR_MAKE_FILE(data_ch)
     /*** GETTING STARTED ***/
 
-
+    
     /*** REDUCING SEQUENCING & PCR ERRORS ***/
     // Process stability files
     MOTHUR_MAKE_CONTIGS(MOTHUR_MAKE_FILE.out.stability, data_ch)
@@ -78,7 +78,7 @@ workflow {
     MOTHUR_UNIQUE_SEQS(MOTHUR_SUMMARY_SCREEN_SEQS.out.stability)
 
     // Channel from reference alignment file; Align unique sequences to ref alignments
-    ref_ch = Channel.fromPath(params.ref_file)
+    ref_ch = channel.fromPath(params.ref_file)
     MOTHUR_PCR_SEQS(MOTHUR_UNIQUE_SEQS.out.stability, ref_ch)
 
     // Align sequences to customized reference that will also save storage space
@@ -94,7 +94,7 @@ workflow {
     MOTHUR_CHIMERA_VSEARCH(MOTHER_PRE_CLUSTER.out.stability)
 
     // Classify sequences with Bayesian classifier
-    train_ch = Channel.fromPath(params.train_dir)
+    train_ch = channel.fromPath(params.train_dir)
     MOTHUR_CLASSIFY(MOTHUR_CHIMERA_VSEARCH.out.stability, train_ch)
 
     // Remove lineage/undesirables and summarize taxonomy
